@@ -5,8 +5,6 @@
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Comex](https://img.shields.io/badge/Comercio_Internacional-Log%C3%ADstica-success?style=for-the-badge)
 
-<img width="1894" height="811" alt="image" src="https://github.com/user-attachments/assets/d0fad624-152a-417a-9c65-81497d9725c6" />
-
 Una herramienta de cotización y proyección de costos de importación (Landed Cost) desarrollada en JavaScript puro (Vanilla JS). 
 Diseñada para automatizar el cálculo de nacionalización de mercadería, optimización de cubicaje y análisis de rentabilidad por SKU.
 
