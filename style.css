@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg-app: #f4f7f9;
+  --bg-card: #ffffff;
+  --mexx-red: #df0000;
+  --mexx-red-hover: #b30000;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-light: #e2e8f0;
+  --radius-md: 10px;
+  --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background-color: var(--bg-app); color: var(--text-dark); line-height: 1.5; }
+
+/* Topbar Horizontal */
+.topbar {
+    background: #0a0f18;
+    color: white;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--mexx-red);
+}
+
+.brand { display: flex; align-items: center; gap: 16px; }
+.brand-badge { width: 40px; height: 40px; background: var(--mexx-red); border-radius: 8px; display: grid; place-items: center; font-weight: 800; font-size: 1.2rem; }
+.brand h1 { font-size: 1.2rem; letter-spacing: -0.5px; }
+.sub { color: #94a3b8; font-size: 0.85rem; }
+
+/* Main Layout Libre */
+.main { padding: 32px 40px; max-width: 1800px; margin: 0 auto; width: 100%; }
+.card { background: var(--bg-card); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border-light); }
+.section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-weight: 700; margin-bottom: 12px; }
+
+/* Inputs Básicos */
+label { display: block; font-size: 0.8rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
+input, select { width: 100%; background: #f8fafc; border: 1px solid var(--border-light); color: var(--text-dark); padding: 10px 12px; border-radius: 6px; font-size: 0.9rem; font-weight: 500; }
+input:focus, select:focus { border-color: var(--mexx-red); outline: none; box-shadow: 0 0 0 3px rgba(223, 0, 0, 0.1); }
+
+/* Item Row Rediseñado (Apilado Vertical) */
+.items-grid { display: grid; gap: 16px; }
+.item-card { background: #f8fafc; border: 1px solid var(--border-light); padding: 20px; border-radius: var(--radius-md); display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 2fr auto; gap: 20px; align-items: end; }
+.stacked { display: flex; flex-direction: column; gap: 12px; }
+.dim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+/* Botones y Toggles */
+.toggle { display: inline-flex; background: #e2e8f0; border-radius: 6px; padding: 4px; }
+.toggle button { padding: 8px 16px; border-radius: 4px; font-weight: 600; border: none; background: transparent; cursor: pointer; color: var(--text-muted); }
+.toggle button.active { background: white; color: var(--text-dark); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+.actions { display: flex; gap: 12px; align-items: center; }
+.scenario-select { max-width: 180px; }
+.btn { background: #f1f5f9; border: 1px solid var(--border-light); padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+.btn:hover { background: #e2e8f0; }
+.btn-primary { background: var(--mexx-red); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+.btn-danger { background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; height: 42px; transition: all 0.2s; }
+.btn-danger:hover { background: #ef4444; color: white; }
+
+/* Grids */
+.grid { display: grid; gap: 24px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-12 { grid-template-columns: repeat(12, 1fr); }
+.col-8 { grid-column: span 8; }
+.col-4 { grid-column: span 4; }
+
+/* Sticky KPIs */
+.sticky-kpis { position: sticky; top: 16px; z-index: 100; margin-bottom: 24px; }
+.metric { padding: 20px; border-left: 4px solid var(--border-light); }
+.metric .k { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
+.metric .v { font-size: 1.8rem; font-weight: 800; color: var(--text-dark); }
+.metric .s { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+/* Tablas y Barras */
+.table-wrap { overflow-x: auto; border: 1px solid var(--border-light); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; background: white; text-align: left; }
+th { background: #f8fafc; padding: 12px 16px; font-size: 0.75rem; color: var(--text-muted); font-weight: 700; border-bottom: 1px solid var(--border-light); }
+td { padding: 12px 16px; font-size: 0.85rem; border-bottom: 1px solid var(--border-light); }
+.right { text-align: right; }
+.center { text-align: center; }
+.bar { height: 8px; background: #e2e8f0; border-radius: 99px; overflow: hidden; }
+.bar span { display: block; height: 100%; border-radius: 99px; transition: width 0.3s; }
+
+/* Data Extras */
+.data-sub { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+/* Factor Heatmap Colors */
+.factor-green { color: #10b981; font-weight: 800; }
+.factor-yellow { color: #f59e0b; font-weight: 800; }
+.factor-red { color: #ef4444; font-weight: 800; }

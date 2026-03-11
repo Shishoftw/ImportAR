@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mexx Logistics - Import Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-badge">M</div>
+            <div>
+                <h1 style="margin:0">MEXX <span style="color:var(--mexx-red)">LOGISTICS</span></h1>
+                <p class="sub">Import Intelligence v3.5</p>
+            </div>
+        </div>
+        <div class="actions">
+            <strong>Escenario:</strong>
+            <input id="scenarioName" class="scenario-select" type="text" value="Importación Q3">
+            <select id="scenarioList" class="scenario-select"><option value="">Cargar guardado…</option></select>
+            <div class="toggle">
+                <button id="showUSD" class="active">USD</button>
+                <button id="showARS">ARS</button>
+            </div>
+            <button id="saveScenario" class="btn">Guardar</button>
+            <input type="file" id="fileImport" accept=".json" style="display:none;">
+            <button id="importJsonBtn" class="btn">Importar JSON</button>
+            <button id="exportJson" class="btn-primary">Exportar JSON</button>
+        </div>
+    </header>
+
+    <main class="main">
+      <div class="card section global-params">
+        <div class="grid grid-4">
+            <div>
+                <div class="section-title">Condición de Compra</div>
+                <div class="toggle" style="width: 100%; display: flex;">
+                    <button id="btnFOB" class="active" style="flex:1">FOB</button>
+                    <button id="btnEXW" style="flex:1">EXW</button>
+                </div>
+                <div id="inlandWrap" style="display:none; margin-top:12px;">
+                    <label>Flete interno origen (USD)</label>
+                    <input id="inlandFreight" type="number" step="any" value="0">
+                </div>
+            </div>
+            <div>
+                <div class="section-title">Logística Internacional</div>
+                <label>Flete internacional (USD)</label>
+                <input id="freight" type="number" step="any" value="1200" style="margin-bottom: 8px;">
+                <label>Seguro (USD)</label>
+                <input id="insurance" type="number" step="any" value="250">
+            </div>
+            <div>
+                <div class="section-title">Aduana y Local</div>
+                <label>Puerto / Despacho (USD)</label>
+                <input id="gastosPuerto" type="number" step="any" value="850" style="margin-bottom: 8px;">
+                <label>Tipo de cambio BNA (ARS/USD)</label>
+                <div style="display:flex; gap:8px;">
+                    <input id="exchangeRate" type="number" step="any" value="1000">
+                    <button id="syncTC" class="btn" title="Sincronizar con DolarAPI">🔄</button>
+                </div>
+            </div>
+            <div>
+                <div class="section-title">Rentabilidad Esperada</div>
+                <label>Margen bruto objetivo (%)</label>
+                <input id="targetMargin" type="range" min="0" max="100" value="35">
+                <div class="range-value" id="targetMarginValue" style="font-weight: 700; color: var(--mexx-red); font-size: 1.2rem; text-align: right;">35%</div>
+            </div>
+        </div>
+      </div>
+
+      <div class="card section sku-section">
+        <div class="items-head" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+          <div class="section-title" style="margin:0;">Listado de Productos (SKUs)</div>
+          <div style="display:flex; gap: 8px;">
+            <button id="pasteExcel" class="btn">📋 Pegar desde Excel</button>
+            <button id="addItem" class="btn-primary">+ Agregar Fila</button>
+          </div>
+        </div>
+        <div id="items" class="items-grid"></div>
+      </div>
+
+      <div class="grid grid-4 section sticky-kpis">
+        <div class="card metric">
+          <div class="k" id="goodsTitle">Total FOB</div>
+          <div class="v" id="totalGoodsValue"></div>
+          <div class="s" id="goodsSub"></div>
+        </div>
+        <div class="card metric">
+          <div class="k">Costo Nacionalizado</div>
+          <div class="v" id="totalCostoNacionalizado" style="color: var(--mexx-red);"></div>
+          <div class="s" id="factorGlobal"></div>
+        </div>
+        <div class="card metric">
+          <div class="k">Costo Unitario Promedio</div>
+          <div class="v" id="avgUnitCost"></div>
+          <div class="s" id="tcSub"></div>
+        </div>
+        <div class="card metric" style="background: #10b981; color: white; border: none;">
+            <div class="k" style="color: rgba(255,255,255,0.8);">Utilidad Neta Estimada</div>
+            <div class="v" id="utilidadNeta" style="color: white;"></div>
+            <div class="s" id="utilidadEq" style="color: rgba(255,255,255,0.8);"></div>
+        </div>
+      </div>
+
+      <div class="grid grid-12 section">
+        <div class="col-4 card">
+            <div class="section-title">Análisis de Carga</div>
+            <div style="font-size:24px; font-weight:800; color:#10b981; margin-bottom: 16px;" id="recommendedContainer">-</div>
+            <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+                <span>Volumen: <strong id="totalCbm">0 CBM</strong></span>
+                <span>Peso: <strong id="totalKg">0 Ton</strong></span>
+            </div>
+            <div class="small muted" style="margin-bottom:6px;">Ocupación por volumen</div>
+            <div class="bar"><span id="cbmBar" style="width:0%; background:#3b82f6;"></span></div>
+            <div class="small muted" style="margin-top:12px; margin-bottom:6px;">Ocupación por peso</div>
+            <div class="bar"><span id="kgBar" style="width:0%; background:#f59e0b;"></span></div>
+            <div id="containerWarning" style="margin-top: 16px;"></div>
+        </div>
+        <div class="col-8 card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div class="section-title">Desglose Impositivo</div>
+            <div class="toggle">
+              <button id="includeRecupBtn" class="active">Incluir IVA/Gan</button>
+              <button id="excludeRecupBtn">Solo costo real</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table><tbody id="breakdownBody"></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <h3 style="margin-bottom:6px;">Análisis individual por SKU</h3>
+        <p class="sub" style="margin-bottom:14px;">El semáforo evalúa el factor de costo logístico. (<span style="color:#10b981">Verde < 1.4</span> | <span style="color:#f59e0b">Amarillo</span> | <span style="color:#ef4444">Rojo > 2.0</span>)</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>SKU / Categoría</th>
+                <th class="right">FOB/U</th>
+                <th class="right">Flete / Seg (Prorrata)</th>
+                <th class="right">DI / TE / Imp. Int.</th>
+                <th class="right">CIF Total</th>
+                <th class="right">Costo Unit. (USD | ARS)</th>
+                <th class="right">Factor</th>
+              </tr>
+            </thead>
+            <tbody id="skuBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
